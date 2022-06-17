@@ -1,7 +1,7 @@
-import { User } from '../interfaces'
+import { File } from '../interfaces'
 
-/** Dummy user data. */
-export const sampleUserData: User[] = [
+/** Dummy file data. */
+export const sampleFileData: File[] = [
   { id: 101, name: 'Alice' },
   { id: 102, name: 'Bob' },
   { id: 103, name: 'Caroline' },
