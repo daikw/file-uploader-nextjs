@@ -8,7 +8,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 // import { sampleFileData } from '../../../utils/sample-data'
 import { listFiles } from '../../../interfaces'
 
-const application_directory = '/Users/daikiwaranabe/ghq/ssh-gitlab.akerun.com/misc/file-uploader-nextjs'
+import { upload_directory } from '../../../utils/env'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const files = await listFiles()
@@ -19,7 +19,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   try {
-    const filePath = `${application_directory}/_uploaded_files/${item.name}`
+    const filePath = `${upload_directory}/${item.name}`
     const fileBuffer = fs.createReadStream(filePath)
 
     res.setHeader('Content-Type', 'application/pdf')

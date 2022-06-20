@@ -12,8 +12,7 @@ const writeFileAsync = promisify(fs.writeFile)
 import formidable from 'formidable'
 
 import { random_alphanumeric } from '../utils/random'
-
-const application_directory = '/Users/daikiwaranabe/ghq/ssh-gitlab.akerun.com/misc/file-uploader-nextjs'
+import { upload_directory } from '../utils/env'
 
 export type File = {
   id: string
@@ -22,7 +21,7 @@ export type File = {
 
 // TODO: avoid race condition
 export const listFiles = async (): Promise<File[]> => {
-  const buf = await readFileAsync(`${application_directory}/_uploaded_files/files.json`, { encoding: 'utf-8' })
+  const buf = await readFileAsync(`${upload_directory}/files.json`, { encoding: 'utf-8' })
   return JSON.parse(buf) as File[]
 }
 
@@ -35,11 +34,11 @@ export const saveFile = async (incoming: formidable.File | formidable.File[]): P
 
   const file = { id: random_alphanumeric(5), name: incoming.originalFilename }
   const data = await readFileAsync(incoming.filepath)
-  await writeFileAsync(`${application_directory}/_uploaded_files/${file.name}`, data)
+  await writeFileAsync(`${upload_directory}/${file.name}`, data)
 
   const files = await listFiles()
   files.push(file)
-  await writeFileAsync(`${application_directory}/_uploaded_files/files.json`, JSON.stringify(files))
+  await writeFileAsync(`${upload_directory}/files.json`, JSON.stringify(files))
 
   fs.unlinkSync(incoming.filepath)
 
