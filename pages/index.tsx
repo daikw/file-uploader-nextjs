@@ -1,15 +1,32 @@
-import Link from 'next/link'
+import { useState } from 'react'
 import Layout from '../components/Layout'
 
-const IndexPage = () => (
-  <Layout title="Home | Next.js + TypeScript Example">
-    <h1>Hello Next.js 👋</h1>
-    <p>
-      <Link href="/about">
-        <a>About</a>
-      </Link>
-    </p>
-  </Layout>
-)
+const IndexPage = () => {
+  const [file, setFile] = useState(null)
+
+  const uploadToClient = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      const i = event.target.files[0]
+      setFile(i)
+    }
+  }
+
+  const uploadToServer = async () => {
+    const body = new FormData()
+    body.append('file', file)
+    await fetch('/api/files', { method: 'POST', body })
+  }
+
+  return (
+    <Layout title="Home | File Uploader">
+      <p>
+        <input type="file" name="file" onChange={uploadToClient} />
+        <button className="btn btn-primary" type="submit" onClick={uploadToServer}>
+          upload
+        </button>
+      </p>
+    </Layout>
+  )
+}
 
 export default IndexPage

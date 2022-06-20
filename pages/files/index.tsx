@@ -1,8 +1,9 @@
 import { GetStaticProps } from 'next'
 import Link from 'next/link'
 
-import { File } from '../../interfaces'
-import { sampleFileData } from '../../utils/sample-data'
+import { File, listFiles } from '../../interfaces'
+// import { sampleFileData } from '../../utils/sample-data'
+
 import Layout from '../../components/Layout'
 import List from '../../components/List'
 
@@ -30,7 +31,7 @@ export const getStaticProps: GetStaticProps = async () => {
   // Example for including static props in a Next.js function component page.
   // Don't forget to include the respective types for any props passed into
   // the component.
-  const items: File[] = sampleFileData
+  const items = await listFiles()
   return { props: { items } }
 }
 

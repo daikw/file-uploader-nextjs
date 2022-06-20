@@ -1,7 +1,8 @@
 import { GetStaticProps, GetStaticPaths } from 'next'
 
-import { File } from '../../interfaces'
-import { sampleFileData } from '../../utils/sample-data'
+import { File, listFiles } from '../../interfaces'
+// import { sampleFileData } from '../../utils/sample-data'
+
 import Layout from '../../components/Layout'
 import ListDetail from '../../components/ListDetail'
 
@@ -22,11 +23,7 @@ const StaticPropsDetail = ({ item, errors }: Props) => {
   }
 
   return (
-    <Layout
-      title={`${
-        item ? item.name : 'File Detail'
-      } | Next.js + TypeScript Example`}
-    >
+    <Layout title={`${item ? item.name : 'File Detail'} | Next.js + TypeScript Example`}>
       {item && <ListDetail item={item} />}
     </Layout>
   )
@@ -36,7 +33,8 @@ export default StaticPropsDetail
 
 export const getStaticPaths: GetStaticPaths = async () => {
   // Get the paths we want to pre-render based on files
-  const paths = sampleFileData.map((file) => ({
+  const files = await listFiles()
+  const paths = files.map((file) => ({
     params: { id: file.id.toString() },
   }))
 
@@ -51,7 +49,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   try {
     const id = params?.id
-    const item = sampleFileData.find((data) => data.id === Number(id))
+    const files = await listFiles()
+    const item = files.find((data) => data.id === id)
     // By returning { props: item }, the StaticPropsDetail component
     // will receive `item` as a prop at build time
     return { props: { item } }

@@ -5,12 +5,14 @@ const pipeline = promisify(stream.pipeline)
 
 import { NextApiRequest, NextApiResponse } from 'next'
 
-import { sampleFileData } from '../../../utils/sample-data'
+// import { sampleFileData } from '../../../utils/sample-data'
+import { listFiles } from '../../../interfaces'
 
 const application_directory = '/Users/daikiwaranabe/ghq/ssh-gitlab.akerun.com/misc/file-uploader-nextjs'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const item = sampleFileData.find((data) => data.id === Number(req.query.id))
+  const files = await listFiles()
+  const item = files.find((data) => data.id === req.query.id)
   if (!item) {
     res.status(404).json({ statusCode: 404, message: 'file not found' })
     return
