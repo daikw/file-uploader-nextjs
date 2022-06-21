@@ -6,6 +6,7 @@
 
 import fs from 'fs'
 import { promisify } from 'util'
+const mkdirAsync = promisify(fs.mkdir)
 const readFileAsync = promisify(fs.readFile)
 const writeFileAsync = promisify(fs.writeFile)
 
@@ -19,14 +20,30 @@ export type File = {
   name: string
 }
 
+const metafile_path = `${upload_directory}/files.json`
+
+const ensureMetaFile = async () => {
+  if (!fs.existsSync(upload_directory)) {
+    await mkdirAsync(upload_directory)
+  }
+
+  if (!fs.existsSync(metafile_path)) {
+    await writeFileAsync(metafile_path, '[]')
+  }
+}
+
 // TODO: avoid race condition
 export const listFiles = async (): Promise<File[]> => {
-  const buf = await readFileAsync(`${upload_directory}/files.json`, { encoding: 'utf-8' })
+  await ensureMetaFile()
+
+  const buf = await readFileAsync(metafile_path, { encoding: 'utf-8' })
   return JSON.parse(buf) as File[]
 }
 
 // TODO: avoid race condition
 export const saveFile = async (incoming: formidable.File | formidable.File[]): Promise<File> => {
+  await ensureMetaFile()
+
   const isArray = (item: any): item is formidable.File[] => item.length > 0
   if (isArray(incoming)) {
     throw new Error('incoming multiple files is not supported')
@@ -38,7 +55,7 @@ export const saveFile = async (incoming: formidable.File | formidable.File[]): P
 
   const files = await listFiles()
   files.push(file)
-  await writeFileAsync(`${upload_directory}/files.json`, JSON.stringify(files))
+  await writeFileAsync(metafile_path, JSON.stringify(files))
 
   fs.unlinkSync(incoming.filepath)
 
