@@ -1,8 +1,8 @@
-[Photosynth/その他/勉強会/社内イベント/Next.js 勉強会/README - photosynth-inc.esa.io](https://photosynth-inc.esa.io/posts/4989) のお題アプリの参考実装です。
+Next.js 勉強会 のお題アプリの参考実装です。
 
 # 使い方
 
-1. まず、[お題のアプリ](https://photosynth-inc.esa.io/posts/4989#Next.js%20%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E3%82%A2%E3%83%97%E3%83%AA%E3%82%92%E4%BD%9C%E3%81%A3%E3%81%A6%E3%81%BF%E3%82%8B:%20OPTIONAL)を自分で作ってみる
+1. まず、お題のアプリを自分で作ってみる
 1. この参考実装を起動してみて、作ったものと比較してみる
 1. 参考実装か、自分で作ったものに対して改善を加えてみる
 
